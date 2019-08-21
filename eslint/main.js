@@ -20,11 +20,13 @@ console.log(action, github.context)
 const octokit = new github.GitHub(GITHUB_TOKEN)
 
 async function run () {
-  const { data: { check_runs } } = await octokit.checks.listForSuite({
+  const { data: { check_runs } } = await octokit.checks.listForRef({
     owner,
     repo,
-    check_suite_id: check_suite.id
+    ref: sha,
+    status: 'in_progress'
   })
+  console.log(check_runs)
   const id = check_runs.pop().id
 
   const eslint = new CLIEngine({
