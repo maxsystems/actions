@@ -1,9 +1,9 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 
-const { CLIEngine } = require('eslint')
-
 const { GITHUB_SHA, GITHUB_EVENT_PATH, GITHUB_TOKEN, GITHUB_WORKSPACE, GITHUB_ACTION } = process.env
+
+const { CLIEngine } = require(GITHUB_WORKSPACE + '/node_modules/eslint')
 
 const {
   repository,
