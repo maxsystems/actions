@@ -20,8 +20,7 @@ async function run () {
   const { data: { check_runs } } = await octokit.checks.listForSuite({
     owner,
     repo,
-    check_suite_id: check_suite.id,
-    status: 'in_progress'
+    check_suite_id: check_suite.id
   })
   const id = check_runs.pop().id
 
