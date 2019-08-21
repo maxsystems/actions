@@ -15,18 +15,17 @@ const {
   sha
 } = github.context
 
-console.log(action, github.context)
-
 const octokit = new github.GitHub(GITHUB_TOKEN)
 
 async function run () {
   const { data: { check_runs } } = await octokit.checks.listForRef({
+    // @TODO: There seems to be a bug; this is always the org name + 'actions'
+    // check_name: action
     owner,
     repo,
     ref: sha,
     status: 'in_progress'
   })
-  console.log(check_runs)
   const id = check_runs.pop().id
 
   const eslint = new CLIEngine({
