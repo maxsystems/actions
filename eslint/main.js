@@ -1,12 +1,11 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 
-const { GITHUB_TOKEN, GITHUB_WORKSPACE } = process.env
+const { GITHUB_TOKEN, GITHUB_WORKSPACE, GITHUB_ACTION } = process.env
 
 const { CLIEngine } = require(GITHUB_WORKSPACE + '/node_modules/eslint')
 
 const {
-  action,
   sha,
   repo: {
     repo,
@@ -20,7 +19,7 @@ async function run () {
   const { data: id } = await octokit.checks.create({
     owner,
     repo,
-    name: action,
+    name: GITHUB_ACTION,
     head_sha: sha,
     status: 'in_progress',
     started_at: new Date()
@@ -29,7 +28,7 @@ async function run () {
   const eslint = new CLIEngine({
     extensions: core.getInput('myToken')
   })
-  const { results, errorCount, warningCount } = eslint.executeOnFiles(['.'])
+  const { results, errorCount, warningCount } = eslint.executeOnFiles([GITHUB_WORKSPACE])
 
   const levels = ['', 'warning', 'failure']
 
@@ -53,7 +52,7 @@ async function run () {
     completed_at: new Date(),
     conclusion: errorCount > 0 ? 'failure' : 'success',
     output: {
-      title: action,
+      title: GITHUB_ACTION,
       summary: `${errorCount} error(s), ${warningCount} warning(s) found`,
       annotations
     }
