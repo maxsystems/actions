@@ -59,9 +59,10 @@ async function run () {
   })
 }
 
-
-try {
-  run()
-} catch (err) {
-  core.setFailed(err)
-}
+;(async () => {
+  try {
+    await run()
+  } catch (err) {
+    core.setFailed(err)
+  }
+})()
