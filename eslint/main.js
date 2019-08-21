@@ -56,6 +56,9 @@ async function run () {
     }
   })
 
+  const formatter = eslint.getFormatter()
+  console.log(formatter(results))
+
   if (errorCount < 1) return
   core.setFailed(summary)
 }
