@@ -1,0 +1,9 @@
+name: 'ESLint'
+description: 'Run ESLint on the project with warnings and errors annotated'
+author: 'MAX Digital'
+inputs:
+  extensions:
+    description: 'An array of filename extensions that should be checked for code.'
+runs:
+  using: 'node12'
+  main: 'main.js'
