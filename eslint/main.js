@@ -5,6 +5,9 @@ const { GITHUB_SHA, GITHUB_EVENT_PATH, GITHUB_TOKEN, GITHUB_WORKSPACE, GITHUB_AC
 
 const { CLIEngine } = require(GITHUB_WORKSPACE + '/node_modules/eslint')
 
+console.log({ GITHUB_SHA, GITHUB_EVENT_PATH, GITHUB_TOKEN, GITHUB_WORKSPACE, GITHUB_ACTION })
+console.log(github.context)
+
 const {
   repository,
   repository: {
