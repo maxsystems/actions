@@ -44,16 +44,20 @@ async function run () {
     return result
   }, [])
 
+  const summary = `${errorCount} error(s), ${warningCount} warning(s) found`
   await octokit.checks.update({
     owner,
     repo,
     check_run_id: id,
     output: {
       title: 'ESLint checks',
-      summary: `${errorCount} error(s), ${warningCount} warning(s) found`,
+      summary,
       annotations
     }
   })
+
+  if (errorCount < 1) return
+  core.setFailed(summary)
 }
 
 ;(async () => {
