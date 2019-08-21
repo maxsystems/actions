@@ -29,7 +29,7 @@ async function run () {
   const id = check_runs.pop().id
 
   const eslint = new CLIEngine({
-    extensions: core.getInput('myToken') || ['.js']
+    extensions: (core.getInput('myToken') || '.js').split(/,\s*/)
   })
   const { results, errorCount, warningCount } = eslint.executeOnFiles([GITHUB_WORKSPACE])
 
