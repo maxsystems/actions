@@ -26,7 +26,7 @@ async function run () {
   })
 
   const eslint = new CLIEngine({
-    extensions: core.getInput('myToken')
+    extensions: core.getInput('myToken') || ['.js']
   })
   const { results, errorCount, warningCount } = eslint.executeOnFiles([GITHUB_WORKSPACE])
 
