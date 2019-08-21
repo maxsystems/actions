@@ -1,29 +1,29 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 
-const { GITHUB_TOKEN, GITHUB_WORKSPACE, GITHUB_ACTION } = process.env
+const { GITHUB_TOKEN, GITHUB_WORKSPACE } = process.env
 
 const { CLIEngine } = require(GITHUB_WORKSPACE + '/node_modules/eslint')
 
 const {
-  sha,
+  payload: { check_suite },
   repo: {
     repo,
     owner
-  }
+  },
+  sha
 } = github.context
 
 const octokit = new github.GitHub(GITHUB_TOKEN)
 
 async function run () {
-  const { data: id } = await octokit.checks.create({
+  const { data: { check_runs } } = await octokit.checks.listForSuite({
     owner,
     repo,
-    name: GITHUB_ACTION,
-    head_sha: sha,
-    status: 'in_progress',
-    started_at: new Date()
+    check_suite_id: check_suite.id,
+    status: 'in_progress'
   })
+  const id = check_runs.pop().id
 
   const eslint = new CLIEngine({
     extensions: core.getInput('myToken') || ['.js']
@@ -48,11 +48,8 @@ async function run () {
     owner,
     repo,
     check_run_id: id,
-    status: 'completed',
-    completed_at: new Date(),
-    conclusion: errorCount > 0 ? 'failure' : 'success',
     output: {
-      title: GITHUB_ACTION,
+      title: 'ESLint checks',
       summary: `${errorCount} error(s), ${warningCount} warning(s) found`,
       annotations
     }
@@ -63,6 +60,7 @@ async function run () {
   try {
     await run()
   } catch (err) {
+    console.error(err)
     core.setFailed(err)
   }
 })()
