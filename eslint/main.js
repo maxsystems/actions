@@ -6,6 +6,7 @@ const { GITHUB_TOKEN, GITHUB_WORKSPACE } = process.env
 const { CLIEngine } = require(GITHUB_WORKSPACE + '/node_modules/eslint')
 
 const {
+  action,
   payload: { check_suite },
   repo: {
     repo,
@@ -13,6 +14,8 @@ const {
   },
   sha
 } = github.context
+
+console.log(action, github.context)
 
 const octokit = new github.GitHub(GITHUB_TOKEN)
 
