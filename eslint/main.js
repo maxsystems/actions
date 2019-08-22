@@ -26,7 +26,7 @@ async function run () {
     ref: sha,
     status: 'in_progress'
   })
-  const id = check_runs.pop().id
+  const id = check_runs.filter(({ app }) => app.id === 15368).pop().id
 
   const eslint = new CLIEngine({
     extensions: (core.getInput('extensions') || '.js').split(/,\s*/)
