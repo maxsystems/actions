@@ -47,16 +47,21 @@ async function run () {
     return result
   }, [])
 
-  await octokit.checks.update({
-    owner,
-    repo,
-    check_run_id: id,
-    output: {
-      title: 'ESLint checks',
-      summary: `${errorCount} error(s), ${warningCount} warning(s) found`,
-      annotations
-    }
-  })
+  try {
+    await octokit.checks.update({
+      owner,
+      repo,
+      check_run_id: id,
+      output: {
+        title: 'ESLint checks',
+        summary: `${errorCount} error(s), ${warningCount} warning(s) found`,
+        annotations
+      }
+    })
+  } catch (err) {
+    console.warn('Unable to annotate check run...')
+    console.error(err)
+  }
 
   const formatter = eslint.getFormatter()
   console.log(formatter(results))
