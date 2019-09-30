@@ -18,7 +18,7 @@ const {
 const octokit = new github.GitHub(GITHUB_TOKEN)
 
 async function run () {
-  console.log(github.context)
+  console.log(process.env, github.context)
   const { data: { check_runs } } = await octokit.checks.listForRef({
     // @TODO: There seems to be a bug; this is always the org name + 'actions'
     // check_name: action
